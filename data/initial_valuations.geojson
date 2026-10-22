@@ -1,0 +1,113 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.651306,
+          -1.282306
+        ]
+      },
+      "properties": {
+        "id": 1,
+        "parcel_number": "Dagoretti/Thogoto/3917",
+        "coordinate_dms": "1°16'56.3\"S 36°39'04.7\"E",
+        "relative_position": "0.21 km West-Northwest",
+        "locality": "Thogoto, Dagoretti",
+        "area_ha": 0.046,
+        "value_kes": 5000000,
+        "valuation_period": "2022-02",
+        "original_value": "5m",
+        "original_date": "02/22",
+        "notes": "",
+        "created_at": "2026-10-19T06:15:38+00:00",
+        "updated_at": "2026-10-19T06:15:38+00:00",
+        "area_sqm": 460.0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.651833,
+          -1.291444
+        ]
+      },
+      "properties": {
+        "id": 2,
+        "parcel_number": "Dagoretti/Settlement Scheme/450",
+        "coordinate_dms": "1°17'29.2\"S 36°39'06.6\"E",
+        "relative_position": "0.98 km South",
+        "locality": "Kangiria Area",
+        "area_ha": 0.046,
+        "value_kes": 3000000,
+        "valuation_period": "2025-03",
+        "original_value": "3m",
+        "original_date": "03/25",
+        "notes": "",
+        "created_at": "2026-10-19T06:15:38+00:00",
+        "updated_at": "2026-10-19T06:15:38+00:00",
+        "area_sqm": 460.0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.663167,
+          -1.2815
+        ]
+      },
+      "properties": {
+        "id": 3,
+        "parcel_number": "Dagoretti/Thogoto/4347",
+        "coordinate_dms": "1°16'53.4\"S 36°39'47.4\"E",
+        "relative_position": "1.13 km East",
+        "locality": "Thogoto, Dagoretti",
+        "area_ha": 0.043,
+        "value_kes": 5000000,
+        "valuation_period": "2023-08",
+        "original_value": "5m",
+        "original_date": "08/23",
+        "notes": "",
+        "created_at": "2026-10-19T06:15:38+00:00",
+        "updated_at": "2026-10-19T06:15:38+00:00",
+        "area_sqm": 430.0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.653861,
+          -1.272222
+        ]
+      },
+      "properties": {
+        "id": 4,
+        "parcel_number": "Karai/Gikambura/9590",
+        "coordinate_dms": "1°16'20.0\"S 36°39'13.9\"E",
+        "relative_position": "1.17 km North",
+        "locality": "Gikambura, Karai",
+        "area_ha": 0.05,
+        "value_kes": 3800000,
+        "valuation_period": "2024-07",
+        "original_value": "3.8m",
+        "original_date": "07/24",
+        "notes": "",
+        "created_at": "2026-10-19T06:15:38+00:00",
+        "updated_at": "2026-10-19T06:15:38+00:00",
+        "area_sqm": 500.0
+      }
+    }
+  ]
+}

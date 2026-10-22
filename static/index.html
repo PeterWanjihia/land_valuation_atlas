@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102625">
+  <meta name="description" content="A searchable GIS atlas of land valuation comparables, with editable records and geospatial overlays.">
+  <title>Landmark — Land Valuation Atlas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoT0cKkcyfA=" crossorigin="">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 2.7 22 7.8v10.4l-9 5.1-9-5.1V7.8L13 2.7Z" stroke="currentColor" stroke-width="1.6"/><path d="m4.3 8 8.7 5.2L21.7 8M13 13.3v9.2" stroke="currentColor" stroke-width="1.6"/><circle cx="13" cy="12.5" r="2.8" fill="#bde57b" stroke="#102625" stroke-width="1.3"/></svg></span>
+        <span class="brand-copy"><strong>LANDMARK<span class="brand-dot">.</span></strong><small>VALUATION ATLAS</small></span>
+      </div>
+      <div class="topbar-center"><span class="status-dot"></span> <span>Kiambu County, Kenya</span><span class="nav-divider"></span><span id="top-total">4 mapped plots</span></div>
+      <div class="top-actions">
+        <button class="button button-quiet" id="import-csv-btn" title="Import another CSV of valuations"><span class="ico">⇧</span><span class="optional-label"> Import CSV</span></button>
+        <button class="button button-quiet" id="add-overlay-btn" title="Import a GeoJSON boundary or infrastructure layer"><span class="ico">▧</span><span class="optional-label"> Add map layer</span></button>
+        <button class="button button-primary" id="add-plot-btn"><span class="ico">＋</span> Add property</button>
+      </div>
+    </header>
+
+    <div class="dashboard">
+      <aside class="sidebar">
+        <div class="side-content">
+          <div class="eyebrow">THE PROPERTY REGISTER <span class="eyebrow-line"></span> LIVE DATABASE</div>
+          <div class="hero-title">Every plot.<br><span>One clear picture.</span></div>
+          <p class="hero-description">A spatial record of comparable land valuations. Select a pin to inspect the full entry.</p>
+
+          <div class="metrics">
+            <div class="metric"><span class="metric-label">Properties</span><strong id="stat-count">4</strong><span class="metric-meta">Georeferenced</span></div>
+            <div class="metric"><span class="metric-label">Average value</span><strong id="stat-avg">KES 4.2M</strong><span class="metric-meta">Recorded valuations</span></div>
+            <div class="metric"><span class="metric-label">Combined area</span><strong id="stat-area">1,850 m²</strong><span class="metric-meta">Land size total</span></div>
+          </div>
+
+          <div class="list-heading"><div><span class="section-kicker">PLOT EXPLORER</span><h2>Property records <span id="shown-count" class="count-pill">4</span></h2></div><div class="mini-dots" aria-hidden="true"><span></span><span></span><span></span></div></div>
+          <div class="search-container"><span class="search-icon" aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="Search by plot no. or locality..." aria-label="Search properties"></div>
+          <div class="filters"><label class="select-wrap"><span>VALUATION YEAR</span><select id="year-filter"><option value="all">All years</option></select></label><label class="select-wrap"><span>SORT BY</span><select id="sort-select"><option value="recent">Most recent</option><option value="value-high">Highest value</option><option value="value-low">Lowest value</option><option value="area-high">Largest plot</option></select></label></div>
+          <div class="property-list" id="property-list" role="list" aria-label="Valuation properties"></div>
+        </div>
+        <div class="sidebar-foot"><div><span class="small-light">DATABASE</span><strong><span class="status-dot"></span> SQLite connected</strong></div><button class="inline-link" id="export-csv-btn">Export CSV ↗</button><button class="inline-link" id="export-geojson-btn">GeoJSON ↗</button></div>
+      </aside>
+
+      <main class="map-region">
+        <div id="map" role="application" aria-label="Interactive land valuation map"></div>
+        <div class="map-top-left"><div class="map-tag"><span class="tag-symbol">⌖</span><span><strong>DAGORETTI / KARAI</strong><small>LAND VALUE INTELLIGENCE</small></span></div><button class="round-action" id="fit-all-btn" title="Show all properties" aria-label="Fit all properties">⤢</button></div>
+        <div class="map-bottom"><div class="map-legend"><span class="legend-dot legend-primary"></span><span>Land valuations</span><span class="legend-divider"></span><span class="legend-dot legend-overlay"></span><span>Imported GIS layers</span></div><div class="map-helper">Click a pin for details · Click the map to add a plot</div></div>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="plot-dialog" class="editor-dialog">
+    <form id="plot-form" novalidate>
+      <header class="dialog-head"><div><span class="section-kicker">PROPERTY REGISTER</span><h2 id="dialog-title">Add a new property</h2><p>All fields marked * are required.</p></div><button type="button" id="close-dialog-btn" class="x-button" aria-label="Close">×</button></header>
+      <div class="dialog-scroll">
+        <div class="field"><label for="parcel_number">Plot / parcel number *</label><input name="parcel_number" id="parcel_number" required placeholder="e.g. Dagoretti/Thogoto/3917"></div>
+        <div class="field"><label for="locality">Locality / description</label><input name="locality" id="locality" placeholder="e.g. Kangiria Area"></div>
+        <div class="form-row"><div class="field"><label for="value_kes">Valuation amount (KES) *</label><input type="number" step="1" min="0" name="value_kes" id="value_kes" required placeholder="5000000"></div><div class="field"><label for="valuation_period">Valuation month *</label><input type="month" name="valuation_period" id="valuation_period" required></div></div>
+        <div class="form-row"><div class="field"><label for="area_ha">Land size (hectares) *</label><input type="number" step="any" min="0.000001" name="area_ha" id="area_ha" required placeholder="0.046"></div><div class="field"><label>Converted area</label><div class="readonly-text" id="sqm-output">— m²</div></div></div>
+        <div class="coordinates-title"><strong>LOCATION</strong><span>Paste Google Maps coordinates, or click the map before opening this form</span></div>
+        <div class="field"><label for="map-url-input">Google Maps URL (optional helper)</label><input id="map-url-input" type="text" placeholder="https://maps.google.com/?q=-1.282306,36.651306"></div>
+        <div class="form-row"><div class="field"><label for="latitude">Latitude *</label><input type="number" name="latitude" id="latitude" required step="any" placeholder="-1.282306"></div><div class="field"><label for="longitude">Longitude *</label><input type="number" name="longitude" id="longitude" required step="any" placeholder="36.651306"></div></div>
+        <div class="field"><label for="coordinate_dms">DMS coordinates (original format)</label><input name="coordinate_dms" id="coordinate_dms" placeholder="1°16'56.3\"S 36°39'04.7\"E"></div>
+        <div class="field"><label for="relative_position">Position relative to reference point</label><input name="relative_position" id="relative_position" placeholder="0.21 km West-Northwest"></div>
+        <div class="field"><label for="notes">Notes / valuation source</label><textarea name="notes" id="notes" rows="3" placeholder="Site observations, sale evidence, valuer, assumptions..." ></textarea></div>
+        <div class="form-row"><div class="field"><label for="original_value">Original value text (optional)</label><input name="original_value" id="original_value" placeholder="5m"></div><div class="field"><label for="original_date">Original date text (optional)</label><input name="original_date" id="original_date" placeholder="02/22"></div></div>
+      </div>
+      <footer class="dialog-footer"><button class="button button-danger" type="button" id="delete-plot-btn" hidden>Delete property</button><div class="dialog-spacer"></div><button class="button button-quiet" type="button" id="cancel-dialog-btn">Cancel</button><button class="button button-primary" type="submit" id="save-plot-btn">Save property →</button></footer>
+    </form>
+  </dialog>
+  <input id="csv-file-input" type="file" accept=".csv,text/csv" hidden>
+  <input id="geojson-file-input" type="file" accept=".geojson,.json,application/json" hidden>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="/app.js"></script>
+</body>
+</html>

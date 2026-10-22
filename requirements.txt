@@ -1,0 +1,2 @@
+# No third-party packages. This file marks the project as Python so Vercel
+# routes every request to server.py.
